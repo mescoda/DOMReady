@@ -11,12 +11,19 @@
     </style>
     <script src="../DOMReady.js"></script>
     <script>
-        DOMReady(function() {
+        domready(function() {
             document.getElementById('status-domready').innerHTML = 'done';
+        });
+
+        domready(function() {
+            alert('dom ready');
         });
 
         window.onload = function() {
             document.getElementById('status-load').innerHTML = 'done';
+            domready(function() {
+                alert('dom ready after load');
+            });
         }
     </script>
 </head>
