@@ -3,12 +3,27 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <style>
+        .status p {
+            font-size: 20px;
+            line-height: 1.5;
+        }
+    </style>
     <script src="../DOMReady.js"></script>
+    <script>
+        DOMReady(function() {
+            document.getElementById('status-domready').innerHTML = 'done';
+        });
+
+        window.onload = function() {
+            document.getElementById('status-load').innerHTML = 'done';
+        }
+    </script>
 </head>
 <body>
     <div class="status">
-        <p id="status-domready">loading</p>
-        <p id="stauts-load">loading</p>
+        <p>DOMReady: <span id="status-domready">loading</span></p>
+        <p>Load: <span id="status-load">loading</span></p>
     </div>
     <script>
     var src = "http://www.nasa.gov/images/content/84857main_EC04-0325-23_lg.jpg?" + (+new Date);
