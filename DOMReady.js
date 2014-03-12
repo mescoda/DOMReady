@@ -21,10 +21,11 @@
                     function doScrollCheck() {
                         try {
                             document.documentElement.doScroll('left');
-                            readyHandler();
                         } catch(e) {
                             setTimeout(doScrollCheck, 10);
+                            return;
                         }
+                        readyHandler();
                     }
                     doScrollCheck();
                 }
