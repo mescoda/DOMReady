@@ -15,7 +15,10 @@
             readyHandler();
         } else {
             if(document.addEventListener) {
-                document.addEventListener('DOMContentLoaded', readyHandler, false);
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.removeEventListener('DOMContentLoaded', arguments.callee, false);
+                    readyHandler();
+                }, false);
             } else if(document.attachEvent) {
                 if(document.documentElement.doScroll && !isInsideFrame) {
                     function doScrollCheck() {
@@ -31,6 +34,7 @@
                 }
                 document.attachEvent('onreadystatechange', function() {
                     if(document.readyState === 'complete') {
+                        document.detachEvent('onreadystatechange', arguments.callee);
                         readyHandler();
                     }
                 });
