@@ -8,6 +8,9 @@
             font-size: 20px;
             line-height: 1.5;
         }
+        .list-item-new {
+            color: #1c9439;
+        }
     </style>
     <script src="../DOMReady.js"></script>
     <script>
@@ -19,10 +22,29 @@
             alert('dom ready');
         });
 
+        domready(function() {
+            document.body.style.backgroundColor = '#EEE';
+        });
+
+        domready(function() {
+            var listElem = document.getElementById('list'),
+                newLiElem = document.createElement('li');
+            newLiElem.className = 'list-item-new';
+            newLiElem.innerHTML = 'three';
+            listElem.appendChild(newLiElem);
+        });
+
         window.onload = function() {
             document.getElementById('status-load').innerHTML = 'done';
             domready(function() {
                 alert('dom ready after load');
+            });
+            domready(function() {
+                var listElem = document.getElementById('list'),
+                    newLiElem = document.createElement('li');
+                newLiElem.className = 'list-item-new';
+                newLiElem.innerHTML = 'four';
+                listElem.appendChild(newLiElem);
             });
         }
     </script>
@@ -32,6 +54,10 @@
         <p>DOMReady: <span id="status-domready">loading</span></p>
         <p>Load: <span id="status-load">loading</span></p>
     </div>
+    <ul id="list">
+        <li>one</li>
+        <li>two</li>
+    </ul>
     <script>
     var src = "http://www.nasa.gov/images/content/84857main_EC04-0325-23_lg.jpg?" + (+new Date);
     document.write("<img src=" + src + " height=240 width=300>");
