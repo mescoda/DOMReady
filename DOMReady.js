@@ -1,45 +1,56 @@
 (function() {
-    function domready(fn) {
+    var domready = (function(fn) {
         var isInsideFrame = (top != self),
-            done = false;
+            eventList = [],
+            emited = false,
+            readyHandler;
 
-        function readyHandler() {
-            if(done) {
-                return;
-            }
-            done = true;
-            fn();
-        }
-
-        if(document.readyState === 'complete') {
-            readyHandler();
-        } else {
-            if(document.addEventListener) {
-                document.addEventListener('DOMContentLoaded', function() {
-                    document.removeEventListener('DOMContentLoaded', arguments.callee, false);
-                    readyHandler();
-                }, false);
-            } else if(document.attachEvent) {
-                if(document.documentElement.doScroll && !isInsideFrame) {
-                    function doScrollCheck() {
-                        try {
-                            document.documentElement.doScroll('left');
-                        } catch(e) {
-                            setTimeout(doScrollCheck, 10);
-                            return;
-                        }
-                        readyHandler();
-                    }
-                    doScrollCheck();
+        function eventsEmitter() {
+            if(!emited) {
+                emited = true;
+                for(var i = 0, iLen = eventList.length; i < iLen; i++) {
+                    eventList[i]();
                 }
-                document.attachEvent('onreadystatechange', function() {
-                    if(document.readyState === 'complete') {
-                        document.detachEvent('onreadystatechange', arguments.callee);
-                        readyHandler();
-                    }
-                });
             }
         }
-    }
+
+        if(document.addEventListener) {
+            readyHandler = function() {
+                document.removeEventListener('DOMContentLoaded', readyHandler, false);
+                eventsEmitter();
+            }
+        } else if(document.attachEvent) {
+            readyHandler = function() {
+                document.detachEvent('onreadystatechange', readyHandler);
+                eventsEmitter();
+            }
+        }
+
+        if(document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', readyHandler, false);
+        } else if(document.attachEvent) {
+             if(document.documentElement.doScroll && !isInsideFrame) {
+                function doScrollCheck() {
+                    try {
+                        document.documentElement.doScroll('left');
+                    } catch(e) {
+                        setTimeout(doScrollCheck, 10);
+                        return;
+                    }
+                    eventsEmitter();
+                }
+                doScrollCheck();
+            }
+            document.attachEvent('onreadystatechange', readyHandler);
+        }
+
+        return function(fn) {
+            if(emited) {
+                fn();
+            } else {
+                eventList.push(fn);
+            }
+        };
+    })();
     window.domready = domready;
 })();
