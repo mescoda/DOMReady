@@ -21,8 +21,10 @@
             }
         } else if(document.attachEvent) {
             readyHandler = function() {
-                document.detachEvent('onreadystatechange', readyHandler);
-                eventsEmitter();
+                if(document.readyState === 'complete') {
+                    document.detachEvent('onreadystatechange', readyHandler);
+                    eventsEmitter();
+                }
             }
         }
 
