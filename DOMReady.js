@@ -14,39 +14,34 @@
             }
         }
 
-        if(document.addEventListener) {
-            readyHandler = function() {
-                document.removeEventListener('DOMContentLoaded', readyHandler, false);
-                eventsEmitter();
+        function doScrollCheck() {
+            try {
+                document.documentElement.doScroll('left');
+            } catch(e) {
+                setTimeout(doScrollCheck, 10);
+                return;
             }
-        } else if(document.attachEvent) {
-            readyHandler = function() {
-                if(document.readyState === 'complete') {
-                    document.detachEvent('onreadystatechange', readyHandler);
-                    eventsEmitter();
-                }
-            }
+            eventsEmitter();
         }
 
         if(document.readyState === 'complete') {
             isDomReady = true;
         } else {
             if(document.addEventListener) {
-                document.addEventListener('DOMContentLoaded', readyHandler, false);
+                document.addEventListener('DOMContentLoaded', readyHandler = function() {
+                    document.removeEventListener('DOMContentLoaded', readyHandler, false);
+                    eventsEmitter();
+                }, false);
             } else if(document.attachEvent) {
-                 if(document.documentElement.doScroll && !isInsideFrame) {
-                    function doScrollCheck() {
-                        try {
-                            document.documentElement.doScroll('left');
-                        } catch(e) {
-                            setTimeout(doScrollCheck, 10);
-                            return;
-                        }
-                        eventsEmitter();
-                    }
+                if(document.documentElement.doScroll && !isInsideFrame) {
                     doScrollCheck();
                 }
-                document.attachEvent('onreadystatechange', readyHandler);
+                document.attachEvent('onreadystatechange', readyHandler = function() {
+                    if(document.readyState === 'complete') {
+                        document.detachEvent('onreadystatechange', readyHandler);
+                        eventsEmitter();
+                    }
+                });
             }
         }
 
