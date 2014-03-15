@@ -2,12 +2,12 @@
     var domready = (function(fn) {
         var isInsideFrame = (top != self),
             eventList = [],
-            emited = false,
+            isDomReady = false,
             readyHandler;
 
         function eventsEmitter() {
-            if(!emited) {
-                emited = true;
+            if(!isDomReady) {
+                isDomReady = true;
                 for(var i = 0, iLen = eventList.length; i < iLen; i++) {
                     eventList[i]();
                 }
@@ -26,26 +26,30 @@
             }
         }
 
-        if(document.addEventListener) {
-            document.addEventListener('DOMContentLoaded', readyHandler, false);
-        } else if(document.attachEvent) {
-             if(document.documentElement.doScroll && !isInsideFrame) {
-                function doScrollCheck() {
-                    try {
-                        document.documentElement.doScroll('left');
-                    } catch(e) {
-                        setTimeout(doScrollCheck, 10);
-                        return;
+        if(document.readyState === 'complete') {
+            isDomReady = true;
+        } else {
+            if(document.addEventListener) {
+                document.addEventListener('DOMContentLoaded', readyHandler, false);
+            } else if(document.attachEvent) {
+                 if(document.documentElement.doScroll && !isInsideFrame) {
+                    function doScrollCheck() {
+                        try {
+                            document.documentElement.doScroll('left');
+                        } catch(e) {
+                            setTimeout(doScrollCheck, 10);
+                            return;
+                        }
+                        eventsEmitter();
                     }
-                    eventsEmitter();
+                    doScrollCheck();
                 }
-                doScrollCheck();
+                document.attachEvent('onreadystatechange', readyHandler);
             }
-            document.attachEvent('onreadystatechange', readyHandler);
         }
 
         return function(fn) {
-            if(emited) {
+            if(isDomReady) {
                 fn();
             } else {
                 eventList.push(fn);
