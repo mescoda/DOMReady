@@ -6,6 +6,6 @@
         newLiElem.innerHTML = 'eight';
         listElem.appendChild(newLiElem);
         testResult.push(8);
-        console && console.log('in 8: append item eight');
+        window.console && window.console.log('in 8: append item eight');
     });
 })();

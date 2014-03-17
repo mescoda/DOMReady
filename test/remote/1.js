@@ -6,6 +6,6 @@
         newLiElem.innerHTML = 'four';
         listElem.appendChild(newLiElem);
         testResult.push(4.1);
-        console && console.log('in 4: append item four');
+        window.console && window.console.log('in 4: append item four');
     });
 })();

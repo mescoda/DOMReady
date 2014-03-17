@@ -33,6 +33,6 @@ function cLog(message) {
             cLog(message[i]);
         }
     } else {
-        console && console.log(message);
+        window.console && window.console.log(message);
     }
 }
