@@ -1,7 +1,7 @@
 // var url1 = 'http://localhost:8000/test/domready/1.js';
-var url1 = 'http://sunzheming.fe.baidu.com/test/domready/1.js';
+var url1 = 'http://sunzheming.fe.baidu.com/test/domready/1.js?t=' + (+new Date);
 // var url2 = 'http://localhost:8000/test/domready/2.js';
-var url2 = 'http://sunzheming.fe.baidu.com/test/domready/2.js';
+var url2 = 'http://sunzheming.fe.baidu.com/test/domready/2.js?t=' + (+new Date);
 
 var domreadyUrl = 'http://sunzheming.fe.baidu.com/test/domready/DOMReady.js';
 
