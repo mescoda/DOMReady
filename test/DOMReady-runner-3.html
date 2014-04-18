@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="http://jasmine.github.io/1.3/lib/jasmine.css" />
+    <style>
+    .status p {
+        font-size: 20px;
+        line-height: 1.5;
+    }
+    .list-item-new {
+        color: #1c9439;
+    }
+    </style>
+</head>
+<body>
+    <script src="http://jasmine.github.io/1.3/lib/jasmine.js"></script>
+    <script src="http://jasmine.github.io/1.3/lib/jasmine-html.js"></script>
+    <script src="../DOMReady.js"></script>
+    <script src="test-utils.js"></script>
+    <script src="DOMReady-spec-3.js"></script>
+    <script>
+        var testResult = [];
+        domready(function() {
+            document.getElementById('status-domready').innerHTML = 'done';
+            testResult.push(2);
+        });
+        window.onload = function() {
+            document.getElementById('status-load').innerHTML = 'done';
+            testResult.push(3);
+            domready(function() {
+                testResult.push(4);
+            });
+        };
+    </script>
+    <script>
+        (function() {
+            var jasmineEnv = jasmine.getEnv();
+            jasmineEnv.updateInterval = 250;
+
+            var htmlReporter = new jasmine.HtmlReporter();
+            jasmineEnv.addReporter(htmlReporter);
+
+            jasmineEnv.specFilter = function(spec) {
+                return htmlReporter.specFilter(spec);
+            };
+
+            var currentWindowOnload = window.onload;
+            window.onload = function() {
+                if (currentWindowOnload) {
+                    currentWindowOnload();
+                }
+
+                execJasmine();
+            };
+            function execJasmine() {
+                jasmineEnv.execute();
+            }
+        })();
+    </script>
+    <div class="status">
+        <p>DOMReady: <span id="status-domready">loading</span></p>
+        <p>Load: <span id="status-load">loading</span></p>
+    </div>
+    <script>
+        sleep(5000);
+    </script>
+    <script>
+        testResult.push(1);
+    </script>
+</body>
+</html>

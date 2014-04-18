@@ -36,3 +36,10 @@ function cLog(message) {
         window.console && window.console.log(message);
     }
 }
+
+function sleep(ms) {
+    var start = (+new Date);
+    while (true) {
+        if ((+new Date) - start > ms) break;
+    }
+}
